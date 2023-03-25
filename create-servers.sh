@@ -1,6 +1,6 @@
 #!/bin/bash
 
-###Change these values ###
+##Change these values ###
 ZONE_ID="Z05552541LPNUVG6DJYCM"
 DOMAIN="devopsb77.online"
 SG_NAME="allow-all"
