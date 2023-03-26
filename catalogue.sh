@@ -11,8 +11,8 @@ unzip /tmp/catalogue.zip
 cd /app
 npm install
 
-cp $script_location/Files/catalogue.service /etc/systemd/system/catalogue.service
+cp $script_location/files/catalogue.service /etc/systemd/system/catalogue.service
 systemctl daemon-reload
 
-cp $script_location/Files/mongodb.repo /etc/yum.repos.d/mongo.repo
+cp $script_location/files/mongodb.repo /etc/yum.repos.d/mongo.repo
 yum install mongodb-org-shell -y
