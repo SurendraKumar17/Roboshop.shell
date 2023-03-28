@@ -1,7 +1,7 @@
  #!/bin/bash
 
  ##Change these values ###
- ZONE_ID="Z06206142S0KI3JQPZW2I"
+ ZONE_ID="Z074348418GM8R9TERRNQ"
  DOMAIN="surendrak.online"
  SG_NAME="allow-all"
  env=dev
