@@ -1,7 +1,8 @@
+#We using this file as a common source file for all the files to get data from here
 script_location=$(pwd)
 LOG=/tmp/roboshop.log
 
-status_check() {
+status_check() { #funtion
   if  [ $? -eq 0 ]; then
       echo -e "\e[1;32mSUCCESS\e[0m"
   else
