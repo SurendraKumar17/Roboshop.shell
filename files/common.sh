@@ -12,3 +12,7 @@ status_check() { #funtion
     fi
 
 }
+
+print_head () {
+  edho -e "\e[1m $1 \e[0m"
+}
