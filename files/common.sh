@@ -13,18 +13,13 @@ status_check() { #funtion
 
 }
 
+
 print_head () {
   edho -e "\e[1m $1 \e[0m"
+
 }
 
-NODEJS() {
-  print_head "Configuring NodeJS Repo"
-  curl -sL https://rpm.nodesource.com/setup_lts.x | bash &>>${LOG}
-  status_check
-
-  print_head "Install NodeJS"
-  yum install nodejs -y &>>${LOG}
-  status_check
+APP_PREREQ() {
 
   print_head "Add application user"
   id roboshop &>>${LOG}
@@ -47,39 +42,95 @@ NODEJS() {
   cd /app
   unzip /tmp/$component.zip &>>${LOG}
   status_check
+}
+
+SYSTEMD_SETUP () {
+
+    print_head "Configuing $component service File"
+    cp $script_location/files/$component.service /etc/systemd/system/$component.service &>>${LOG}
+    status_check
+
+    print_head "Reload systemD"
+    systemctl daemon-reload &>>${LOG}
+    status_check
+
+    print_head "Enable $component service"
+    systemctl enable $component &>>${LOG}
+    status_check
+
+    print_head "Start $component service"
+    systemctl start $component &>>${LOG}
+    status_check
+}
+
+LOAD_SCHEMA () {
+
+  if [ $schema_load == "true" ]; then
+
+     if [ $schema_type == "mongo" ]; then
+      print_head "Configuring Mongo Repo"
+      cp $script_location/files/mongodb.repo /etc/yum.repos.d/mongo.repo &>>${LOG}
+      status_check
+
+      print_head "Install MongoDB Client"
+      yum install mongodb-org-shell -y &>>${LOG}
+      status_check
+
+      print_head "Load Schema"
+      mongo --host mongodb-dev.surendrak.online </app/schema/$component.js &>>${LOG}
+      status_check
+    fi
+
+    if [ $schema_type == "mysql" ]; then
+       print_head "Install mysql Client"
+       yum install mysql-org-shell -y &>>${LOG}
+       status_check
+
+       print_head "Load Schema"
+       mysql -h mysql-dev.surendrak.online -uroot -p$root_mysql_password < /app/schema/shipping.sql  &>>${LOG}
+       status_check
+    fi
+  fi
+}
+
+NODEJS() {
+  print_head "Configuring NodeJS Repo"
+  curl -sL https://rpm.nodesource.com/setup_lts.x | bash &>>${LOG}
+  status_check
+
+  print_head "Install NodeJS"
+  yum install nodejs -y &>>${LOG}
+  status_check
+
+  APP_PREREQ
 
   print_head "Installing NodeJS Dependencies"
   cd /app &>>${LOG}
   npm install &>>${LOG}
   status_check
 
-  print_head "Configuing $component service File"
-  cp $script_location/files/$component.service /etc/systemd/system/$component.service &>>${LOG}
+  SYSTEMD_SETUP
+  LOAD_SCHEMA
+}
+
+
+MAVEN () {
+
+  print_head "Install Maven"
+  yum install maven -y &>>${LOG}
   status_check
 
-  print_head "Reload systemD"
-  systemctl daemon-reload &>>${LOG}
+  APP_PREREQ
+
+  print_head "Build a package"
+  mvn clean package
   status_check
 
-  print_head "Enable $component service"
-  systemctl enable $component &>>${LOG}
+  print_head "Copy a file to app location"
+  mv target/$component-1.0.jar $component.jar
   status_check
 
-  print_head "Start $component service"
-  systemctl start $component &>>${LOG}
-  status_check
+  SYSTEMD_SETUP
+  LOAD_SCHEMA
 
-  if [ $schema_load == "true" ]; then
-   print_head "Configuring Mongo Repo"
-   cp $script_location/files/mongodb.repo /etc/yum.repos.d/mongo.repo &>>${LOG}
-   status_check
-
-   print_head "Install MongoDB Client"
-   yum install mongodb-org-shell -y &>>${LOG}
-   status_check
-
-   print_head "Load Schema"
-   mongo --host mongodb-dev.surendrak.online </app/schema/$component.js &>>${LOG}
-   status_check
-  fi
 }
