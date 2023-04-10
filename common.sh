@@ -1,4 +1,4 @@
-#We using this file as a common source file for all the files to get data globally.
+#We using this file as a common source file for all the files to get data globally..
 script_location=$(pwd)
 LOG=/tmp/roboshop.log
 
