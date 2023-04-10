@@ -40,3 +40,7 @@ status_check
 print_head "add permissions to application user"
 rabbitmqctl set_permissions -p / roboshop ".*" ".*" ".*" &>>${LOG}
 status_check
+
+#Execution : export roboshop_rabbitmq_password=roboshop123
+
+#Sudo -E bash rabbitmq.sh
