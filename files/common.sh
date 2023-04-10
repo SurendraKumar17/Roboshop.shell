@@ -123,7 +123,7 @@ MAVEN () {
   APP_PREREQ
 
   print_head "Build a package"
-  mvn clean package
+  mvn clean package &>>${LOG}
   status_check
 
   print_head "Copy a file to app location"
@@ -132,5 +132,27 @@ MAVEN () {
 
   SYSTEMD_SETUP
   LOAD_SCHEMA
+
+}
+
+PYTHON () {
+
+    print_head "Install python"
+    yum install python36 gcc python3-devel -y &>>${LOG}
+    status_check
+
+    APP_PREREQ
+
+    print_head "download dependencies"
+    cd /app
+    pip3.6 install -r requirements.txt &>>${LOG}
+    status_check
+
+    print_head "update passwords in service file"
+    sed -e -i "s/roboshop_rabbitmq_password/$roboshop_rabbitmq_password/" $script_location/files/$component.service &>>${LOG}
+    status_check
+
+    SYSTEMD_SETUP
+    LOAD_SCHEMA
 
 }
