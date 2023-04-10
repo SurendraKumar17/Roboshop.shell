@@ -83,7 +83,7 @@ LOAD_SCHEMA () {
 
     if [ $schema_type == "mysql" ]; then
        print_head "Install mysql Client"
-       yum install mysql-org-shell -y &>>${LOG}
+       yum install mysql -y &>>${LOG}
        status_check
 
        print_head "Load Schema"
