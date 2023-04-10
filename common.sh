@@ -66,22 +66,21 @@ SYSTEMD_SETUP () {
 LOAD_SCHEMA () {
 
   if [ $schema_load == "true" ]; then
-
      if [ $schema_type == "mongo" ]; then
-      print_head "Configuring Mongo Repo"
-      cp $script_location/files/mongodb.repo /etc/yum.repos.d/mongo.repo &>>${LOG}
-      status_check
+       print_head "Configuring Mongo Repo"
+       cp $script_location/files/mongodb.repo /etc/yum.repos.d/mongo.repo &>>${LOG}
+       status_check
 
-      print_head "Install MongoDB Client"
-      yum install mongodb-org-shell -y &>>${LOG}
-      status_check
+       print_head "Install MongoDB Client"
+       yum install mongodb-org-shell -y &>>${LOG}
+       status_check
 
-      print_head "Load Schema"
-      mongo --host mongodb-dev.surendrak.online </app/schema/$component.js &>>${LOG}
-      status_check
-    fi
+       print_head "Load Schema"
+       mongo --host mongodb-dev.surendrak.online </app/schema/$component.js &>>${LOG}
+       status_check
+     fi
 
-    if [ $schema_type == "mysql" ]; then
+     if [ $schema_type == "mysql" ]; then
        print_head "Install mysql Client"
        yum install mysql -y &>>${LOG}
        status_check
@@ -89,7 +88,7 @@ LOAD_SCHEMA () {
        print_head "Load Schema"
        mysql -h mysql-dev.surendrak.online -uroot -p$root_mysql_password < /app/schema/shipping.sql  &>>${LOG}
        status_check
-    fi
+     fi
   fi
 }
 
