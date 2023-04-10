@@ -23,7 +23,7 @@ APP_PREREQ() {
 
   print_head "Add application user"
   id roboshop &>>${LOG}
-  if [ S? -ne 0 ] ; then
+  if [ $? -ne 0 ] ; then
     useradd roboshop &>>${LOG}
   fi
   status_check
