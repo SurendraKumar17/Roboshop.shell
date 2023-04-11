@@ -1,3 +1,4 @@
+#catalogue microservice
 source common.sh
 
 component=catalogue
