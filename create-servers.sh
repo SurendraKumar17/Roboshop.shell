@@ -1,6 +1,6 @@
  #!/bin/bash
 
- ##Change these values ###
+ ##Change these values
  ZONE_ID="Z074348418GM8R9TERRNQ"
  DOMAIN="surendrak.online"
  SG_NAME="allow-all"
